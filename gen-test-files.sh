@@ -1,4 +1,7 @@
 #!/bin/sh
+mkdir ./test-files
+
+rm ./test-files/*
 
 touch ./test-files/"[][][][]l"
 touch ./test-files/"(abc123)"

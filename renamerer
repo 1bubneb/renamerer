@@ -1,20 +1,26 @@
+#!/usr/bin/env ruby
+
 ARGV.each{|i|
 	fname = i.split("/")[-1]
-	path = i.split("/")[0...-1]
+	path = i.split("/")[0...-1].join("/")
 	newName = fname.gsub(/\[[\w\d\_\-\&\%\^\#\$\@\`\~\"\'\;\:\,\>\<\.\?\!\{\}\[\]\(\)\=\+\s].*\]/, '').gsub(/\([\w\d\s\_\-\&\^\%\$\#\@\`\~\'|'\;\:\,\.\<\>\+\=\[\]\)\(\{\}\*].*\)/, '')
 	
 	while newName.include?("  ")
 		newName.gsub!("  ",  " ")
 	end
 
-	newName.gsub!(/\ *\./,'.')
+	newName.gsub!(/\ +\./,'.')
 
 	newName = newName.lstrip
 	newName = newName.rstrip
 
 	if i != newName && newName != ''
-		puts "rename \"" + i + "\" to \"" + newName + "\""
-		File.rename(i, newName)
+		puts "rename \"" + i + "\" to \"" + path + "/" + newName + "\""
+		if path.empty?
+			File.rename(i,newName)
+		else
+			File.rename(i, path + "/" + newName)
+		end
 	elsif newName == ''
 		puts "\"" + i + "\" not renamed (new name empty)"
 	else	
