@@ -8,6 +8,8 @@ and can be more easily changed to meet my personal filenaming conventions
 also I'm tried of not always having `rename`/`prename` 
 (from Perl 5.x File::rename), on every system that I  used
 
-** USAGE **
+**USAGE**
+
 `renamerer [list o' files to rename]`
+
 `renamerer [path/to/files/*]` *yay globbing!*
