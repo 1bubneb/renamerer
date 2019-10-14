@@ -3,23 +3,32 @@
 ARGV.each{|i|
 	fname = i.split("/")[-1]
 	path = i.split("/")[0...-1].join("/")
-	newName = fname.gsub(/\[[\w\d\_\-\&\%\^\#\$\@\`\~\"\'\;\:\,\>\<\.\?\!\{\}\[\]\(\)\=\+\s].*\]/, '').gsub(/\([\w\d\s\_\-\&\^\%\$\#\@\`\~\'|'\;\:\,\.\<\>\+\=\[\]\)\(\{\}\*].*\)/, '')
+	newName = fname.gsub(/\[[\w\d\s\-\&\%\^\#\$\@\`\~\"\'\;\:\,\>\<\.\?\!\=\+]+\]/, '').gsub(/\([\w\d\s\-\&\^\%\$\#\@\`\~\'|'\;\:\,\.\<\>\+\=*]+\)/, '')
 	
 	while newName.include?("  ")
 		newName.gsub!("  ",  " ")
 	end
 
+	newName.gsub!(/BD|bd/, "")
+	newName.gsub!(/DVD|dvd/, "")
 	newName.gsub!(/\ +\./,'.')
+	newName.gsub!(/\_+\./,'.')
+	newName.gsub!(/_/,' ')
+	newName.gsub!(/\ \-\ /," ")
 
 	newName = newName.lstrip
 	newName = newName.rstrip
 
+	epreg = /\ (\d+)/
+	enum = epreg.match(newName)[0].lstrip
+	newName.gsub!(epreg," S{season}E" + enum)
+
 	if i != newName && newName != ''
 		puts "rename \"" + i + "\" to \"" + path + "/" + newName + "\""
 		if path.empty?
-			File.rename(i,newName)
+			#File.rename(i,newName)
 		else
-			File.rename(i, path + "/" + newName)
+			#File.rename(i, path + "/" + newName)
 		end
 	elsif newName == ''
 		puts "\"" + i + "\" not renamed (new name empty)"
